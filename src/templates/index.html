@@ -1,0 +1,544 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Velocity Shield</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --bg: #f8fafc;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            /* Ensures padding doesn't affect width */
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        #result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .safe {
+            background-color: #dcfce7;
+            color: var(--success);
+            border: 1px solid #86efac;
+        }
+
+        .danger {
+            background-color: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fca5a5;
+        }
+
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>🛡️ Fraud Shield</h1>
+        <p class="subtitle">Velocity-Based Transaction Monitor</p>
+
+        <div class="form-group">
+            <label>Transaction Amount ($)</label>
+            <input type="number" id="amount" value="100.00" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label>Velocity (Last 15 Mins)</label>
+            <input type="number" id="velocity" value="1" min="1" max="50">
+            <small style="color: #94a3b8; font-size: 0.8rem;">How many transactions by this user recently?</small>
+        </div>
+
+        <button onclick="checkFraud()">Scan Transaction</button>
+        <div class="loader" id="loader"></div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function checkFraud() {
+            const amount = document.getElementById('amount').value;
+            const velocity = document.getElementById('velocity').value;
+            const resultDiv = document.getElementById('result');
+            const loader = document.getElementById('loader');
+
+            // Reset UI
+            resultDiv.style.display = 'none';
+            resultDiv.className = '';
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount, velocity })
+                });
+
+                const data = await response.json();
+
+                loader.style.display = 'none';
+                resultDiv.style.display = 'block';
+
+                if (data.error) {
+                    resultDiv.textContent = "Error: " + data.error;
+                    resultDiv.className = 'danger';
+                    return;
+                }
+
+                if (data.is_fraud) {
+                    resultDiv.className = 'danger';
+                    resultDiv.innerHTML = `<strong>🚨 BLOCKED</strong><br>${data.message}<br>Probability: ${data.probability}`;
+                } else {
+                    resultDiv.className = 'safe';
+                    resultDiv.innerHTML = `<strong>✅ APPROVED</strong><br>${data.message}<br>Probability: ${data.probability}`;
+                }
+
+            } catch (error) {
+                loader.style.display = 'none';
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = "Connection Error";
+                resultDiv.className = 'danger';
+            }
+        }
+    </script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard AI</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dashboard {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            transition: transform 0.2s;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 1.8rem;
+        }
+
+        .header p {
+            margin-top: 0.5rem;
+            color: var(--text-sub);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.85rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.85rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: #fca5a5;
+            color: #7f1d1d;
+            flex: 0.8;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f87171;
+        }
+
+        /* Result Card */
+        #result-card {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+            text-align: center;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .status-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Probability Risk Meter */
+        .risk-meter-container {
+            background-color: rgba(0, 0, 0, 0.05);
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .risk-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Result States */
+        .safe {
+            background-color: #dcfce7;
+            color: #14532d;
+            border: 1px solid #86efac;
+        }
+
+        .safe .risk-meter-fill {
+            background-color: var(--success);
+        }
+
+        .danger {
+            background-color: #fee2e2;
+            color: #7f1d1d;
+            border: 1px solid #fca5a5;
+        }
+
+        .danger .risk-meter-fill {
+            background-color: var(--danger);
+        }
+
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <div class="header">
+            <h1>🛡️ FraudGuard AI</h1>
+            <p>Real-time Velocity Analysis</p>
+        </div>
+
+        <div class="form-group">
+            <label>Transaction Amount ($)</label>
+            <input type="number" id="amount" placeholder="e.g. 150.00" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label>Velocity (Last 15 Mins)</label>
+            <input type="number" id="velocity" placeholder="e.g. 1" min="0" max="100">
+            <small style="color: var(--text-sub);">Number of recent transactions by this user</small>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="checkFraud()">🛡️ Scan Now</button>
+            <button class="btn btn-secondary" onclick="simulateTransaction()">⚡ Simulate</button>
+        </div>
+
+        <div class="loader" id="loader"></div>
+
+        <div id="result-card">
+            <span class="status-icon" id="icon"></span>
+            <span class="status-text" id="status-text"></span>
+            <div style="font-size: 0.9rem; opacity: 0.8;" id="msg-text"></div>
+
+            <div style="margin-top: 15px; font-size: 0.85rem; display: flex; justify-content: space-between;">
+                <span>Safety Score</span>
+                <span id="prob-text">0%</span>
+            </div>
+            <div class="risk-meter-container">
+                <div class="risk-meter-fill" id="risk-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Function to Scan the Input
+        async function checkFraud() {
+            const amount = document.getElementById('amount').value;
+            const velocity = document.getElementById('velocity').value;
+
+            if (!amount || !velocity) {
+                alert("Please enter both Amount and Velocity");
+                return;
+            }
+
+            toggleLoader(true);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount, velocity })
+                });
+
+                const data = await response.json();
+                toggleLoader(false);
+                displayResult(data);
+
+            } catch (error) {
+                toggleLoader(false);
+                alert("Connection Error to Backend");
+            }
+        }
+
+        // 2. Function to Simulate Random Data
+        async function simulateTransaction() {
+            toggleLoader(true);
+            try {
+                // Request random data from Python
+                const response = await fetch('/simulate');
+                const data = await response.json();
+
+                // Auto-fill inputs
+                document.getElementById('amount').value = data.amount;
+                document.getElementById('velocity').value = data.velocity;
+
+                // Auto-trigger scan
+                await checkFraud();
+            } catch (error) {
+                toggleLoader(false);
+                alert("Simulation Failed");
+            }
+        }
+
+        // Helper: Toggle Loader
+        function toggleLoader(show) {
+            document.getElementById('loader').style.display = show ? 'block' : 'none';
+            if (show) document.getElementById('result-card').style.display = 'none';
+        }
+
+        // Helper: Show Results
+        function displayResult(data) {
+            const card = document.getElementById('result-card');
+            const icon = document.getElementById('icon');
+            const statusText = document.getElementById('status-text');
+            const msgText = document.getElementById('msg-text');
+            const probText = document.getElementById('prob-text');
+            const riskBar = document.getElementById('risk-bar');
+
+            card.style.display = 'block';
+
+            // Set styles based on fraud status
+            card.className = data.is_fraud ? 'danger' : 'safe';
+
+            if (data.is_fraud) {
+                icon.textContent = '🚨';
+                statusText.textContent = 'BLOCKED';
+                msgText.textContent = `High Risk Pattern Detected. ${data.message}`;
+            } else {
+                icon.textContent = '✅';
+                statusText.textContent = 'APPROVED';
+                msgText.textContent = 'Transaction looks normal.';
+            }
+
+            probText.textContent = `Fraud Probability: ${data.probability_display}`;
+
+            // Animate Bar
+            setTimeout(() => {
+                riskBar.style.width = `${data.probability_score * 100}%`;
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
